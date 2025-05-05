@@ -86,7 +86,11 @@ export async function readMessage(id: string): Promise<MessageResponse> {
         const message = await Message.findOne({id});
 
         if (!message) {
-            return Promise.reject("Message not found");
+            return Promise.reject(new AppError(
+                500,
+                'Looks like this message has been expired',
+                ErrorCodes.MESSAGE_NOT_FOUND
+            ));;
         }
 
         // Update message state
