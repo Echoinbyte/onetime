@@ -74,16 +74,16 @@ You can now access the app at http://localhost:3000.
 ## Usage
 ### Steps to Use OneTime
 ```mermaid
-# sequenceDiagram
-participant A as User
-participant B as OneTime App
-participant C as Recipient
-A->>B: Type message
-B->>A: Generate self-destructing link
-A->>C: Share link
-C->>B: Open link (Message Read)
-B->>C: Message self-destructs
-B->>A: No record or history
+flowchart TD
+    participant A as User
+    participant B as OneTime App
+    participant C as Recipient
+    A->>B: Type message
+    B->>A: Generate self-destructing link
+    A->>C: Share link
+    C->>B: Open link (Message Read)
+    B->>C: Message self-destructs
+    B->>A: No record or history
 ```
 1. Go to the OneTime App.
 2. Type your confidential message.
