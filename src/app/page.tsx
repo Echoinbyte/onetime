@@ -84,7 +84,7 @@ export default function MessageForm() {
         }
     };
 
-        const link = `${process.env.NEXT_PUBLIC_ORIGIN || "http://localhost:3000"}/message/${messageId}`;
+        const link = `https://onetimex.vercel.app/message/${messageId}`;
 
         return (
             <motion.div
