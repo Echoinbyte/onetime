@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://onetime.vercel.app/sitemap.xml
