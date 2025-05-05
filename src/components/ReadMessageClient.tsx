@@ -67,10 +67,11 @@ export default function ReadMessageClient({ id }: { id: string }) {
             >
                 <AlertCircle className="w-16 h-16 mx-auto mb-4 text-red-500"/>
                 <h1 className="text-2xl font-bold text-red-600 dark:text-red-400">
-                    {error.code === 'MESSAGE_NOT_FOUND' ? 'Message Not Found' : 'Error'}
+                    {/*{error.code === 'MESSAGE_NOT_FOUND' ? 'Message Not Found' : 'Error'}*/}
+                    Message Not Found
                 </h1>
                 <p className="text-zinc-700 dark:text-zinc-300 mt-2">
-                    {error.message}
+                    Looks like this message has been expired.
                 </p>
             </motion.div>
         );
