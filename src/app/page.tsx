@@ -2,153 +2,14 @@
 
 import "@blocknote/core/fonts/inter.css";
 import "@blocknote/mantine/style.css";
-import {startTransition, useEffect, useMemo, useRef, useState} from 'react';
+import {useState} from 'react';
 import {createMessage} from '@/app/actions';
 import {motion, AnimatePresence} from 'framer-motion';
 import {AlertCircle, Check, CopyIcon, Loader2, Lock, Timer, Users} from 'lucide-react';
 import confetti from 'canvas-confetti';
 import {AppError} from "@/lib/errors";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
-import {
-    DefaultReactSuggestionItem,
-    getDefaultReactSlashMenuItems,
-    SuggestionMenuController,
-    useCreateBlockNote
-} from "@blocknote/react";
-import {
-    BlockNoteSchema,
-    combineByGroup,
-    defaultBlockSpecs,
-    defaultInlineContentSpecs,
-    filterSuggestionItems, insertOrUpdateBlock
-} from "@blocknote/core";
-import {BlockNoteView} from "@blocknote/mantine";
-import {
-    getMultiColumnSlashMenuItems,
-    locales as multiColumnLocales,
-    multiColumnDropCursor, withMultiColumn
-} from "@blocknote/xl-multi-column";
-import {en} from "@blocknote/core/locales";
-import {Alert} from "@/components/shared/Alert";
-import {Blockquote} from "@/components/shared/Blockquote";
-import {MathExpression} from "@/components/shared/Math";
-import {HorizontalRule} from "@/components/shared/Hr";
-import {IframeBlock} from "@/components/shared/Iframe";
-import {Mention} from "@/components/shared/Mention";
-import {RiAlertFill, RiComputerLine, RiDoubleQuotesL, RiFunctionLine, RiSeparator} from "react-icons/ri";
-
-const schema = BlockNoteSchema.create({
-    blockSpecs: {
-        ...defaultBlockSpecs,
-        alert: Alert,
-        blockquote: Blockquote,
-        mathExpression: MathExpression,
-        hr: HorizontalRule,
-        iframe: IframeBlock,
-    },
-    inlineContentSpecs: {
-        ...defaultInlineContentSpecs,
-        mention: Mention,
-    },
-});
-
-const extendedSchema = withMultiColumn(schema);
-
-const insertAlert = (editor: typeof extendedSchema.BlockNoteEditor) => ({
-    title: "Alert",
-    onItemClick: () => {
-        insertOrUpdateBlock(editor, {
-            type: "alert",
-        });
-    },
-    aliases: [
-        "alert",
-        "notification",
-        "emphasize",
-        "warning",
-        "error",
-        "info",
-        "success",
-    ],
-    group: "Modules",
-    icon: <RiAlertFill/>,
-    subtext: "Highlight important info.",
-});
-
-const insertBlockquote = (editor: typeof extendedSchema.BlockNoteEditor) => ({
-    title: "Blockquote",
-    onItemClick: () => {
-        insertOrUpdateBlock(editor, {
-            type: "blockquote",
-        });
-    },
-    aliases: ["blockquote", "quote", "citation", "reference", "quotation"],
-    group: "Modules",
-    icon: <RiDoubleQuotesL/>,
-    subtext: "Emphasize quotes or references.",
-});
-
-const insertMathExpression = (
-    editor: typeof extendedSchema.BlockNoteEditor
-) => ({
-    title: "Math Expression",
-    onItemClick: () => {
-        insertOrUpdateBlock(editor, {
-            type: "mathExpression",
-        });
-    },
-    aliases: ["math", "equation", "formula", "calculation", "expression"],
-    group: "Modules",
-    icon: <RiFunctionLine/>,
-    subtext: "Display math or science equations.",
-});
-
-const insertHR = (editor: typeof extendedSchema.BlockNoteEditor) => ({
-    title: "Horizontal Rule",
-    onItemClick: () => {
-        insertOrUpdateBlock(editor, {
-            type: "hr", // Type should match the block type created for horizontal rules
-        });
-    },
-    aliases: ["hr", "divider", "line"],
-    group: "Modules",
-    icon: <RiSeparator/>, // You can replace this with an appropriate icon
-    subtext: "Insert a horizontal line to separate content.",
-});
-
-const insertIframe = (editor: typeof extendedSchema.BlockNoteEditor) => ({
-    title: "I-Frame",
-    onItemClick: () => {
-        insertOrUpdateBlock(editor, {
-            type: "iframe", // This should match the block type used for iframe
-        });
-    },
-    aliases: ["iframe", "embed", "video", "external"],
-    group: "Modules",
-    icon: <RiComputerLine/>, // You can replace this with an appropriate icon
-    subtext: "Embed external content via iframe.",
-});
-
-const getMentionMenuItems = (
-    editor: typeof extendedSchema.BlockNoteEditor
-): DefaultReactSuggestionItem[] => {
-    const users = ["people", "everyone", "someone", "noone", "admin", "author"];
-
-    return users.map((user) => ({
-        title: user,
-        onItemClick: () => {
-            editor.insertInlineContent([
-                {
-                    type: "mention",
-                    props: {
-                        user,
-                    },
-                },
-                " ",
-            ]);
-        },
-    }));
-};
+import CompoundEditor from "@/components/CompoundEditor";
 
 interface ErrorState {
     message: string;
@@ -223,66 +84,6 @@ export default function MessageForm() {
         }
     };
 
-    const editor = useCreateBlockNote({
-        schema: extendedSchema,
-        dropCursor: multiColumnDropCursor,
-        dictionary: {
-            ...en,
-            multi_column: multiColumnLocales.en,
-        },
-        placeholders: {
-            ...en.placeholders,
-            emptyDocument: "Type '/' to insert a block, and enter your secret message",
-        },
-        tables: {
-            cellBackgroundColor: true,
-            cellTextColor: true,
-            headers: true,
-            splitCells: true,
-        },
-    });
-
-
-    const timerRef = useRef<NodeJS.Timeout | null>(null);
-
-    useEffect(() => {
-        return () => {
-            if (timerRef.current) clearTimeout(timerRef.current);
-        };
-    }, []);
-
-
-    const editorOnChange = async () => {
-        if (!editor.document) return;
-
-        if (timerRef.current) {
-            clearTimeout(timerRef.current);
-        }
-
-        timerRef.current = setTimeout(() => {
-            const content = JSON.stringify(editor.document);
-            startTransition(() => setCompoundContent(content));
-        }, 500);
-    }
-
-        const getSlashMenuItems = useMemo(() => {
-            return async (query: string) =>
-                filterSuggestionItems(
-                    combineByGroup(
-                        getDefaultReactSlashMenuItems(editor),
-                        getMultiColumnSlashMenuItems(editor),
-                        [
-                            insertAlert(editor),
-                            insertBlockquote(editor),
-                            insertMathExpression(editor),
-                            insertHR(editor),
-                            insertIframe(editor),
-                        ]
-                    ),
-                    query
-                );
-        }, [editor]);
-
         const link = `${process.env.NEXT_PUBLIC_ORIGIN || "http://localhost:3000"}/message/${messageId}`;
 
         return (
@@ -313,42 +114,29 @@ export default function MessageForm() {
                                     <TabsContent value="simple">
                                     <textarea
                                         className={`w-full h-40 p-4 rounded-lg border transition-all
-                                    ${error?.field === 'content'
-                                            ? 'border-red-500 ring-2 ring-red-500'
-                                            : 'border-zinc-300 dark:border-zinc-700'} 
-                                    bg-zinc-100 dark:bg-zinc-800`}
+                                        ${error?.field === 'content'
+                                                                            ? 'border-red-500 ring-2 ring-red-500'
+                                                                            : 'border-zinc-300 dark:border-zinc-700'}
+                                        bg-zinc-100 dark:bg-zinc-800`}
                                         placeholder="Enter your secret message..."
                                         value={simpleContent}
                                         onChange={(e) => {
                                             setContent(e.target.value);
                                             if (error?.field === 'content') setError(null);
                                         }}
+                                        aria-label="Secret message"
+                                        aria-invalid={error?.field === 'content'}
+                                        aria-describedby={error?.field === 'content' ? 'content-error' : undefined}
                                     />
                                     </TabsContent>
                                     <TabsContent value="compound">
-                                        <BlockNoteView
-                                            editor={editor}
-                                            onChange={editorOnChange}
-                                            slashMenu={false}
-                                            className="w-full"
-                                        >
-                                            <SuggestionMenuController
-                                                triggerCharacter={"/"}
-                                                getItems={getSlashMenuItems}
-                                            />
-                                            <SuggestionMenuController
-                                                triggerCharacter={"@"}
-                                                getItems={async (query) =>
-                                                    filterSuggestionItems(getMentionMenuItems(editor), query)
-                                                }
-                                            />
-                                        </BlockNoteView>
+                                        <CompoundEditor compoundContent={compoundContent} setCompoundContent={setCompoundContent} />
                                     </TabsContent>
                                 </Tabs>
 
 
                                 {error?.field === 'content' && (
-                                    <p className="text-red-500 text-sm -mt-2">{error.message}</p>
+                                    <p id="content-error" className="text-red-500 text-sm -mt-2">{error.message}</p>
                                 )}
 
                                 <div className="flex flex-col sm:flex-row gap-4">
@@ -367,9 +155,12 @@ export default function MessageForm() {
                                             className={`w-full p-2 rounded-lg border ${error?.field === 'expiry'
                                                 ? 'border-red-500 ring-2 ring-red-500'
                                                 : 'border-zinc-300 dark:border-zinc-700'} border-zinc-300 dark:border-zinc-700 bg-zinc-100 dark:bg-zinc-800`}
+                                            aria-label="Expiry time in hours"
+                                            aria-invalid={error?.field === 'expiry'}
+                                            aria-describedby={error?.field === 'expiry' ? 'expiry-error' : undefined}
                                         />
                                         {error?.field === 'expiry' && (
-                                            <div className="p-4 bg-red-50 dark:bg-red-900/20 rounded-lg">
+                                            <div id="expiry-error" className="p-4 bg-red-50 dark:bg-red-900/20 rounded-lg">
                                                 <p className="text-red-600 dark:text-red-400 text-sm flex items-center gap-2">
                                                     <AlertCircle size={16}/>
                                                     {error.message}
@@ -393,9 +184,12 @@ export default function MessageForm() {
                                             className={`w-full p-2 rounded-lg border  ${error?.field === 'viewLimit'
                                                 ? 'border-red-500 ring-2 ring-red-500'
                                                 : 'border-zinc-300 dark:border-zinc-700'} border-zinc-300 dark:border-zinc-700 bg-zinc-100 dark:bg-zinc-800`}
+                                            aria-label="View limit"
+                                            aria-invalid={error?.field === 'viewLimit'}
+                                            aria-describedby={error?.field === 'viewLimit' ? 'viewLimit-error' : undefined}
                                         />
                                         {error?.field === 'viewLimit' && (
-                                            <div className="p-4 bg-red-50 dark:bg-red-900/20 rounded-lg">
+                                            <div id="viewLimit-error" className="p-4 bg-red-50 dark:bg-red-900/20 rounded-lg">
                                                 <p className="text-red-600 dark:text-red-400 text-sm flex items-center gap-2">
                                                     <AlertCircle size={16}/>
                                                     {error.message}
@@ -409,6 +203,7 @@ export default function MessageForm() {
                                     onClick={handleSubmit}
                                     className="cursor-pointer w-full py-3 rounded-lg bg-gradient-to-r from-blue-500 to-violet-500 text-white hover:opacity-90 transition-all flex items-center justify-center gap-2"
                                     disabled={isLoading}
+                                    aria-label="Secure message"
                                 >
                                     {isLoading ? (
                                         <Loader2 className="animate-spin"/>
