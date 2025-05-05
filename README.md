@@ -66,7 +66,7 @@ OneTime is built using the latest technologies to ensure that it remains fast, s
 To get started locally, clone this repository and set up the application:
 
 ```bash
-git clone https://github.com/yourusername/onetime.git
+git clone https://github.com/Echoinbyte/onetime.git
 cd onetime
 npm install
 npm start
