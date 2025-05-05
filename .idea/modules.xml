@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/onetime.iml" filepath="$PROJECT_DIR$/.idea/onetime.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/onetimex.iml" filepath="$PROJECT_DIR$/.idea/onetimex.iml" />
     </modules>
   </component>
 </project>

@@ -1,8 +1,8 @@
-# OneTime – Secure Self-Destructing Messages
+# OneTimex – Secure Self-Destructing Messages
 
-OneTime is a minimalist, privacy-first web app for sending secret messages via self-destructing links. **No history, no traces.** Secure, simple, and one-time only. If privacy is your priority, then OneTime is the solution you’ve been waiting for.
+OneTimex is a minimalist, privacy-first web app for sending secret messages via self-destructing links. **No history, no traces.** Secure, simple, and one-time only. If privacy is your priority, then OneTimex is the solution you’ve been waiting for.
 
-![OneTime Logo](https://onetime.vercel.app/brand/onetime-og.jpg)
+![OneTimex Logo](https://onetimex.vercel.app/brand/onetimex-og.jpg)
 
 ## Table of Contents
 
@@ -36,7 +36,7 @@ flowchart TD
     G --> H[No trace, no history]
 ```
 
-1. **Send a Secure Message**: Type your message, and OneTime will generate an encrypted link.
+1. **Send a Secure Message**: Type your message, and OneTimex will generate an encrypted link.
 2. **Message Hashing**: Before the message is stored, it is hashed to protect its confidentiality.
 3. **One-Time Link**: Send the generated link to your recipient.
 4. **Message Self-Destructs**: Once the recipient views the message, it disappears forever. No record, no trace.
@@ -47,13 +47,13 @@ It's that simple. No login, no accounts, no history.
 
 Below is a GIF showcasing how the message is hashed before it is sent:
 
-![Hashing Process](https://onetime.vercel.app/hashing-algorithm.gif)
+![Hashing Process](https://onetimex.vercel.app/hashing-algorithm.gif)
 
 In this example, you can see how your message is converted into a secure hash, ensuring that no one can decrypt or read it.
 
 ## Tech Stack
 
-OneTime is built using the latest technologies to ensure that it remains fast, secure, and scalable:
+OneTimex is built using the latest technologies to ensure that it remains fast, secure, and scalable:
 
 - **Frontend**: React.js, HTML5, CSS3, Tailwind CSS
 - **Backend**: Node.js, Express
@@ -66,19 +66,19 @@ OneTime is built using the latest technologies to ensure that it remains fast, s
 To get started locally, clone this repository and set up the application:
 
 ```bash
-git clone https://github.com/Echoinbyte/onetime.git
-cd onetime
+git clone https://github.com/Echoinbyte/onetimex.git
+cd onetimex
 npm install
 npm start
 ```
 You can now access the app at http://localhost:3000.
 
 ## Usage
-### Steps to Use OneTime
+### Steps to Use OneTimex
 ```mermaid
 sequenceDiagram
     participant A as User
-    participant B as OneTime App
+    participant B as OneTimex App
     participant C as Recipient
 
     A->>B: Type message
@@ -88,7 +88,7 @@ sequenceDiagram
     B->>C: Message self-destructs
     B->>A: No record or history
 ```
-1. Go to the OneTime App.
+1. Go to the OneTimex App.
 2. Type your confidential message.
 
 3. Click "Generate Link."
@@ -100,7 +100,7 @@ sequenceDiagram
 That's it! One-time communication, fully encrypted, and privacy-first.
 
 ## Contributing
-We welcome contributions to make OneTime even better! If you'd like to contribute, follow these steps:
+We welcome contributions to make OneTimex even better! If you'd like to contribute, follow these steps:
 
 1. Fork the repository.
 
@@ -115,7 +115,7 @@ We welcome contributions to make OneTime even better! If you'd like to contribut
 Please make sure to write tests and keep the codebase clean and readable.
 
 ## License
-OneTime is licensed under the MIT License. See the LICENSE file for more details.
+OneTimex is licensed under the MIT License. See the LICENSE file for more details.
 
 ## Conclusion
-If you value privacy and simplicity, OneTime is your go-to solution for secure and confidential communication.
+If you value privacy and simplicity, OneTimex is your go-to solution for secure and confidential communication.

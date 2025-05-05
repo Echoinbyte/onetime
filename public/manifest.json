@@ -1,7 +1,7 @@
 {
-  "name": "OneTime",
-  "short_name": "OneTime",
-  "description": "Send private, self-destructing messages. OneTime is secure, minimal, and trace-free.",
+  "name": "OneTimex",
+  "short_name": "OneTimex",
+  "description": "Send private, self-destructing messages. OneTimex is secure, minimal, and trace-free.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#000000",
