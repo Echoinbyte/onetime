@@ -2,6 +2,8 @@
 
 OneTime is a minimalist, privacy-first web app for sending secret messages via self-destructing links. **No history, no traces.** Secure, simple, and one-time only. If privacy is your priority, then OneTime is the solution you’ve been waiting for.
 
+![OneTime Logo](https://onetime.vercel.app/brand/onetime-og.jpg)
+
 ## Table of Contents
 
 - [Features](#features)
@@ -74,10 +76,11 @@ You can now access the app at http://localhost:3000.
 ## Usage
 ### Steps to Use OneTime
 ```mermaid
-flowchart TD
+sequenceDiagram
     participant A as User
     participant B as OneTime App
     participant C as Recipient
+
     A->>B: Type message
     B->>A: Generate self-destructing link
     A->>C: Share link
@@ -114,33 +117,5 @@ Please make sure to write tests and keep the codebase clean and readable.
 ## License
 OneTime is licensed under the MIT License. See the LICENSE file for more details.
 
-## SEO Keywords
-- Secure Message
-
-- Self-Destructing Message
-
-- One-Time Message
-
-- Encrypted Link
-
-- Confidential Notes
-
-- Private Messaging
-
-- Password Sharing
-
-- Privacy App
-
-- Secret Message Link
-
-- Temporary Message
-
-- Data Privacy
-
-- Secure Communication
-
-- Message Encryption
-
-- One-Time Use App
-
+## Conclusion
 If you value privacy and simplicity, OneTime is your go-to solution for secure and confidential communication.
